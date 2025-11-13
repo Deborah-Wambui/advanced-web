@@ -1,0 +1,174 @@
+/* Base Styles - Reset, Layout, Accessibility */
+@import url('./tokens.css');
+
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: var(--font-family-base);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text);
+}
+
+/* Focus styles for accessibility */
+:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: var(--space-4);
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    padding: var(--space-2) var(--space-4);
+    text-decoration: none;
+    border-radius: var(--radius-base);
+}
+
+.skip-link:focus {
+    top: var(--space-4);
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+/* Header & Navigation */
+header {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4) 0;
+}
+
+.logo {
+    color: var(--color-text-on-primary);
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: var(--space-6);
+}
+
+.nav-menu a {
+    color: var(--color-text-on-primary);
+    text-decoration: none;
+}
+
+.nav-menu a[aria-current="page"] {
+    text-decoration: underline;
+}
+
+/* Main Content */
+main {
+    padding: var(--space-6) 0;
+}
+
+/* Hero Section */
+.hero {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    padding: var(--space-6) 0;
+    text-align: center;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+}
+
+.feature-card {
+    background: var(--color-surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-base);
+}
+
+/* Events & Clubs Grid */
+.events-grid,
+.clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.event-card,
+.club-card {
+    background: var(--color-surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-base);
+    box-shadow: var(--shadow-base);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: var(--space-4);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--space-2);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+}
+
+button {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    padding: var(--space-2) var(--space-4);
+    border: none;
+    border-radius: var(--radius-base);
+    cursor: pointer;
+}
+
+/* Footer */
+footer {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    padding: var(--space-4) 0;
+    text-align: center;
+    margin-top: var(--space-6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        gap: var(--space-2);
+        text-align: center;
+    }
+}
