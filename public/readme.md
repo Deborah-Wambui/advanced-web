@@ -1,52 +1,45 @@
-Project Overview
-A university portal for students to access campus services including events, clubs, room bookings, and help desk support.
+Project Overview A university portal for students to access campus services including events, clubs, room bookings, and help desk support.
 
-Features Implemented
-Homepage with service overview
+Features Implemented -Homepage with service overview
 
-Events & Clubs browsing page
+-Events & Clubs browsing page
 
-Room Booking & Help Desk forms page
+-Room Booking & Help Desk forms page
 
-Responsive design for all devices
+-Responsive design for all devices
 
-Keyboard navigation and screen reader support
+-Keyboard navigation and screen reader support
 
-Technology Used
-HTML5 with semantic structure
+Technology Used -HTML5 with semantic structure
 
-CSS3 with Grid/Flexbox layouts
+-CSS3 with Grid/Flexbox layouts
 
-Vanilla JavaScript for basic accessibility
+-Vanilla JavaScript for basic accessibility
 
 WCAG 2.1 AA compliance
 
-Key Concepts
-Semantic HTML landmarks (header, nav, main, footer)
+Key Concepts -Semantic HTML landmarks (header, nav, main, footer)
 
-Accessible skip links and focus indicators
+-Accessible skip links and focus indicators
 
-Mobile-first responsive design
+-Mobile-first responsive design
 
-CSS custom properties for theming
+-CSS custom properties for theming
 
-Minimal JavaScript for accessibility enhancements
+-Minimal JavaScript for accessibility enhancements
 
-How to Run
-Serve the public folder using any static server
+How to Run -Serve the public folder using any static server
 
-Open index.html in a web browser
+-Open index.html in a web browser
 
-Navigate between pages using keyboard or mouse
+-Navigate between pages using keyboard or mouse
 
-Accessibility Features
-Skip to main content links
+Accessibility Features -Skip to main content links
 
-Proper heading hierarchy
+-Proper heading hierarchy
 
-ARIA labels and landmarks
+-ARIA labels and landmarks
 
-Sufficient color contrast
+-Sufficient color contrast
 
-Focus management
-
+-Focus management
