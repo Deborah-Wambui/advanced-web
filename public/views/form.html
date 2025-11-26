@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book & Support - Campus Life</title>
+    <meta name="description" content="Book rooms and get help desk support">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/base.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation">
+            <div class="nav-container">
+                <h1><a href="../index.html" class="logo">Campus Life</a></h1>
+                <ul class="nav-menu">
+                    <li><a href="../index.html" class="nav-link">Home</a></li>
+                    <li><a href="data.html" class="nav-link">Events & Clubs</a></li>
+                    <li><a href="form.html" aria-current="page" class="nav-link">Book & Support</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main">
+        <!-- Compact Page Header -->
+        <section class="compact-book-support-hero">
+            <div class="container">
+                <h1>Book & Support</h1>
+                <p>Reserve study spaces and get help with any issues you're facing.</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Forms Side by Side -->
+            <div class="forms-side-by-side">
+                <!-- Room Bookings Form -->
+                <section class="form-column" aria-labelledby="bookings-heading">
+                    <div class="compact-section-header">
+                        <h2 id="bookings-heading">Room Bookings</h2>
+                        <p>Reserve study spaces for your academic needs</p>
+                    </div>
+                    
+                    <div class="compact-form-container">
+                        <form id="booking-form" class="compact-form">
+                            <div class="form-group">
+                                <label for="name">Your Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="room">Select a room *</label>
+                                <select id="room" name="room" required>
+                                    <option value="">Choose a room...</option>
+                                    <option value="Study Room A">Study Room A</option>
+                                    <option value="Study Room B">Study Room B</option>
+                                    <option value="Study Room C">Study Room C</option>
+                                    <option value="Group Study Room">Group Study Room</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="date">Date *</label>
+                                    <input type="date" id="date" name="date" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="time">Time *</label>
+                                    <input type="time" id="time" name="time" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="purpose">Purpose</label>
+                                <textarea id="purpose" name="purpose" placeholder="Brief description of your booking purpose" rows="3"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Book Room</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Help Desk Form -->
+                <section class="form-column" aria-labelledby="helpdesk-heading">
+                    <div class="compact-section-header">
+                        <h2 id="helpdesk-heading">Help Desk</h2>
+                        <p>Submit a ticket for any issues you're experiencing</p>
+                    </div>
+                    
+                    <div class="compact-form-container">
+                        <form id="ticket-form" class="compact-form">
+                            <div class="form-group">
+                                <label for="ticket-name">Name *</label>
+                                <input type="text" id="ticket-name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject *</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="priority">Priority *</label>
+                                <select id="priority" name="priority" required>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Urgent">Urgent</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="issue">Description *</label>
+                                <textarea id="issue" name="issue" required placeholder="Please describe your issue in detail" rows="4"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Submit Ticket</button>
+                        </form>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Lists Side by Side -->
+            <div class="lists-side-by-side">
+                <!-- Bookings List -->
+                <section class="list-column">
+                    <div class="compact-list-section">
+                        <h3>Your Bookings</h3>
+                        <div id="bookings-list" class="compact-list">
+                            <!-- Bookings will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tickets List -->
+                <section class="list-column">
+                    <div class="compact-list-section">
+                        <h3>Your Tickets</h3>
+                        <div id="queue-status" class="compact-list">
+                            <!-- Tickets will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Compact Footer -->
+    <footer role="contentinfo" class="compact-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@studenthub.edu</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Hours: Mon-Fri 8am-6pm</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Student Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/form-page.js"></script>
+</body>
+</html>
