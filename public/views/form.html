@@ -19,6 +19,8 @@
                     <li><a href="../index.html" class="nav-link">Home</a></li>
                     <li><a href="data.html" class="nav-link">Events & Clubs</a></li>
                     <li><a href="form.html" aria-current="page" class="nav-link">Book & Support</a></li>
+                    <li><a href="signIn_signUp.html" class="nav-link">SignIn & SignUp</a></li>
+
                 </ul>
             </div>
         </nav>
@@ -183,5 +185,147 @@
     </footer>
 
     <script src="../js/form-page.js"></script>
+        <!-- ============================
+         FIREBASE CONNECTION + LOGIC
+    =============================== -->
+    <!-- Firebase v9 (Modular SDK) -->
+    <script type="module">
+        /* -----------------------------------------
+           1. IMPORT FIREBASE LIBRARIES
+        -------------------------------------------- */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { 
+            getFirestore, collection, addDoc, onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        /* -----------------------------------------
+           2. YOUR FIREBASE CONFIG  (REQUIRED)
+              Replace with your real Firebase keys
+        -------------------------------------------- */
+         const firebaseConfig = {
+    apiKey: "AIzaSyAXb2qJhuxbQGz6izzl53EKJMFvVO7KixA",
+    authDomain: "campuslife-14f6f.firebaseapp.com",
+    projectId: "campuslife-14f6f",
+    storageBucket: "campuslife-14f6f.firebasestorage.app",
+    messagingSenderId: "226330226174",
+    appId: "1:226330226174:web:5f9a1f4355ba6d31e7e4af"
+  };
+        
+
+        /* -----------------------------------------
+           3. INITIALIZE FIREBASE APP + FIRESTORE
+        -------------------------------------------- */
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        console.log("🔥 Firebase Connected Successfully!");
+
+        /* -----------------------------------------
+           4. ROOM BOOKING FORM SUBMIT
+        -------------------------------------------- */
+        const bookingForm = document.getElementById("booking-form");
+
+        bookingForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const room = document.getElementById("room").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+            const purpose = document.getElementById("purpose").value;
+
+            try {
+                await addDoc(collection(db, "bookings"), {
+                    name,
+                    room,
+                    date,
+                    time,
+                    purpose,
+                    createdAt: new Date()
+                });
+
+                alert("Room booked successfully!");
+                bookingForm.reset();
+            } catch (error) {
+                console.error("Error saving booking:", error);
+                alert("Failed to save booking.");
+            }
+        });
+
+        /* -----------------------------------------
+           5. HELP DESK FORM SUBMIT
+        -------------------------------------------- */
+        const ticketForm = document.getElementById("ticket-form");
+
+        ticketForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("ticket-name").value;
+            const email = document.getElementById("email").value;
+            const subject = document.getElementById("subject").value;
+            const priority = document.getElementById("priority").value;
+            const issue = document.getElementById("issue").value;
+
+            try {
+                await addDoc(collection(db, "tickets"), {
+                    name,
+                    email,
+                    subject,
+                    priority,
+                    issue,
+                    createdAt: new Date()
+                });
+
+                alert("Ticket submitted!");
+                ticketForm.reset();
+            } catch (error) {
+                console.error("Error saving ticket:", error);
+                alert("Failed to submit ticket.");
+            }
+        });
+
+        /* -----------------------------------------
+           6. REAL-TIME DISPLAY FOR BOOKINGS
+        -------------------------------------------- */
+        const bookingsList = document.getElementById("bookings-list");
+
+        onSnapshot(collection(db, "bookings"), (snapshot) => {
+            bookingsList.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                bookingsList.innerHTML += `
+                    <div class="list-item">
+                        <h4>${data.room} — ${data.date}</h4>
+                        <p><strong>Name:</strong> ${data.name}</p>
+                        <p><strong>Time:</strong> ${data.time}</p>
+                        <p><strong>Purpose:</strong> ${data.purpose || "No purpose provided"}</p>
+                    </div>
+                `;
+            });
+        });
+
+        /* -----------------------------------------
+           7. REAL-TIME DISPLAY FOR HELP DESK TICKETS
+        -------------------------------------------- */
+        const ticketList = document.getElementById("queue-status");
+
+        onSnapshot(collection(db, "tickets"), (snapshot) => {
+            ticketList.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                ticketList.innerHTML += `
+                    <div class="list-item">
+                        <h4>${data.subject}</h4>
+                        <p><strong>Name:</strong> ${data.name}</p>
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Priority:</strong> ${data.priority}</p>
+                        <p><strong>Issue:</strong> ${data.issue}</p>
+                    </div>
+                `;
+            });
+        });
+
+    </script>
+
 </body>
 </html>
