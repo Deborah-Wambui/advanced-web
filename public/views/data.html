@@ -20,7 +20,6 @@
                    <li><a href="data.html" aria-current="page" class="nav-link">Events & Clubs</a></li>
                    <li><a href="form.html" class="nav-link">Book & Support</a></li>
                     <li><a href="signIn_signUp.html" class="nav-link">SignIn & SignUp</a></li>
-                   
                 </ul>
             </div>
         </nav>
@@ -66,7 +65,6 @@
 
                 <!-- Events Container -->
                 <div id="events-container" class="events-grid">
-                    <!-- Events will load here dynamically via JavaScript -->
                     <div class="loading">Loading events...</div>
                 </div>
             </div>
@@ -82,7 +80,6 @@
 
                 <!-- Clubs Container -->
                 <div id="clubs-container" class="clubs-grid">
-                    <!-- Clubs will load here dynamically via JavaScript -->
                     <div class="loading">Loading clubs...</div>
                 </div>
             </div>
@@ -118,6 +115,8 @@
         </div>
     </footer>
 
-    <script src="../js/data-page.js"></script>
+    <!-- NOTE: We use type="module" to import Firebase inside the JS file -->
+    <script type="module" src="../js/data-page.js"></script>
+    
 </body>
 </html>

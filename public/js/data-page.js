@@ -1,4 +1,30 @@
-// Events and Clubs functionality for data.html
+/* -----------------------------------------
+   1. IMPORT FIREBASE LIBRARIES
+-------------------------------------------- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+    getFirestore, collection, addDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* -----------------------------------------
+   2. FIREBASE CONFIG
+-------------------------------------------- */
+const firebaseConfig = {
+    apiKey: "AIzaSyAXb2qJhuxbQGz6izzl53EKJMFvVO7KixA",
+    authDomain: "campuslife-14f6f.firebaseapp.com",
+    projectId: "campuslife-14f6f",
+    storageBucket: "campuslife-14f6f.firebasestorage.app",
+    messagingSenderId: "226330226174",
+    appId: "1:226330226174:web:5f9a1f4355ba6d31e7e4af"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+console.log("🔥 Firebase Connected in Data Page!");
+
+/* -----------------------------------------
+   3. DATA MANAGER CLASS
+-------------------------------------------- */
 class DataManager {
     constructor() {
         this.events = [];
@@ -8,6 +34,8 @@ class DataManager {
     }
 
     loadData() {
+        // We keep the logic to load from local storage if available, 
+        // but rely on the hardcoded initialization if not found.
         const savedData = localStorage.getItem('campusData');
         if (savedData) {
             const data = JSON.parse(savedData);
@@ -19,6 +47,7 @@ class DataManager {
     }
 
     initializeSampleData() {
+        // HARDCODED VALUES AS REQUESTED - DO NOT TOUCH
         this.events = [
             {
                 id: 1,
@@ -45,7 +74,7 @@ class DataManager {
                 category: 'career',
                 description: 'Connect with top employers from various industries. Bring your resume and make valuable professional connections.',
                 fullDescription: 'Meet representatives from over 50 top companies including Google, Microsoft, Amazon, and local startups. This is your chance to explore internship and full-time opportunities across various industries. Professional dress recommended. Resume review services available.',
-                image: './img/career-fair.jpg',
+                image: 'https://picsum.photos/400/250?random=2',
                 featured: false,
                 organizer: 'Career Services',
                 capacity: 500,
@@ -61,7 +90,7 @@ class DataManager {
                 category: 'workshop',
                 description: 'Perfect for beginners! Learn Python programming fundamentals through hands-on exercises.',
                 fullDescription: 'This hands-on workshop will introduce you to Python programming from the ground up. We will cover variables, data types, control structures, functions, and basic file operations. By the end, you will have built your first Python application. Laptops will be provided, but feel free to bring your own.',
-                image: "img/python-workshop.jpg",
+                image: "https://picsum.photos/400/250?random=3",
                 featured: true,
                 organizer: 'Computer Science Department',
                 capacity: 30,
@@ -78,7 +107,7 @@ class DataManager {
                 fullDescription: 'The Computer Science Society is a community of students passionate about technology and programming. We organize weekly coding sessions, host guest speakers from the tech industry, participate in hackathons, and work on collaborative projects. All skill levels are welcome!',
                 members: 45,
                 category: 'academic',
-                image: 'img/computer-science-society.png',
+                image: 'https://picsum.photos/400/250?random=4',
                 meetingTime: 'Tuesdays 6:00 PM',
                 contact: 'css@university.edu',
                 president: 'Sarah Johnson',
@@ -92,7 +121,7 @@ class DataManager {
                 fullDescription: 'Whether you are using a smartphone or a professional camera, our Photography Club welcomes all levels of photographers. We organize weekly photo walks, monthly workshops on different techniques, and semester-end exhibitions to showcase your work. Equipment is available for checkout.',
                 members: 28,
                 category: 'arts',
-                image: 'img/photography-club.webp',
+                image: 'https://picsum.photos/400/250?random=5',
                 meetingTime: 'Thursdays 5:00 PM',
                 contact: 'photography@university.edu',
                 president: 'Mike Chen',
@@ -106,7 +135,7 @@ class DataManager {
                 fullDescription: 'Our Basketball Team competes in inter-collegiate tournaments while maintaining a supportive environment for players of all skill levels. We have competitive and recreational divisions, with professional coaching available. Regular practice sessions focus on skill development, teamwork, and strategy.',
                 members: 15,
                 category: 'sports',
-                image: "img/basketball-team.jpg",
+                image: "https://picsum.photos/400/250?random=6",
                 meetingTime: 'Mon & Wed 4:00 PM',
                 contact: 'basketball@university.edu',
                 president: 'James Wilson',
@@ -126,7 +155,6 @@ class DataManager {
     }
 
     init() {
-        console.log('DataManager initialized');
         this.createModal();
         this.renderEvents();
         this.renderClubs();
@@ -135,15 +163,8 @@ class DataManager {
     }
 
     createModal() {
-        // Check if modal already exists
-        if (document.querySelector('.details-modal')) {
-            console.log('Modal already exists');
-            return;
-        }
+        if (document.querySelector('.details-modal')) return;
 
-        console.log('Creating modal...');
-        
-        // Create modal element
         const modal = document.createElement('div');
         modal.className = 'details-modal';
         modal.innerHTML = `
@@ -159,32 +180,22 @@ class DataManager {
         `;
         document.body.appendChild(modal);
 
-        // Close modal when clicking overlay or close button
         modal.querySelector('.modal-overlay').addEventListener('click', () => this.closeModal());
         modal.querySelector('.modal-close').addEventListener('click', () => this.closeModal());
         
-        // Close modal with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.closeModal();
         });
-
-        console.log('Modal created successfully');
     }
 
+    // ---------------------------------------------------------
+    // EVENT DETAILS LOGIC
+    // ---------------------------------------------------------
     showEventDetails(eventId) {
-        console.log('Showing event details for:', eventId);
         const event = this.events.find(e => e.id === parseInt(eventId));
-        if (!event) {
-            console.error('Event not found:', eventId);
-            return;
-        }
+        if (!event) return;
 
         const modalBody = document.querySelector('.modal-body');
-        if (!modalBody) {
-            console.error('Modal body not found');
-            return;
-        }
-
         modalBody.innerHTML = `
             <div class="event-details">
                 <div class="detail-header">
@@ -194,17 +205,10 @@ class DataManager {
                 <h2>${this.escapeHTML(event.title)}</h2>
                 <div class="detail-meta">
                     <div class="meta-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                        </svg>
-                        <span>${event.date} at ${event.time}</span>
+                        <span>🗓 ${event.date} at ${event.time}</span>
                     </div>
                     <div class="meta-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                        <span>${this.escapeHTML(event.location)}</span>
+                        <span>📍 ${this.escapeHTML(event.location)}</span>
                     </div>
                 </div>
                 <div class="detail-content">
@@ -212,48 +216,38 @@ class DataManager {
                     <p>${this.escapeHTML(event.fullDescription)}</p>
                     
                     <div class="detail-grid">
-                        <div class="detail-item">
-                            <strong>Organizer:</strong>
-                            <span>${this.escapeHTML(event.organizer)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Capacity:</strong>
-                            <span>${event.capacity} attendees</span>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Requirements:</strong>
-                            <span>${this.escapeHTML(event.requirements)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Contact:</strong>
-                            <span>${this.escapeHTML(event.contact)}</span>
-                        </div>
+                        <div class="detail-item"><strong>Organizer:</strong> ${this.escapeHTML(event.organizer)}</div>
+                        <div class="detail-item"><strong>Capacity:</strong> ${event.capacity} attendees</div>
                     </div>
                 </div>
                 <div class="modal-actions">
-                    <button class="btn btn-primary">Register for Event</button>
-                    <button class="btn btn-secondary">Add to Calendar</button>
+                    <button id="btn-register-event" class="btn btn-primary">Register for Event</button>
+                    <button id="btn-add-calendar" class="btn btn-secondary">Add to Calendar</button>
                 </div>
             </div>
         `;
 
+        // 1. REGISTER EVENT CLICK
+        document.getElementById("btn-register-event").addEventListener("click", () => {
+            this.renderRegistrationForm(event);
+        });
+
+        // 2. ADD TO CALENDAR CLICK
+        document.getElementById("btn-add-calendar").addEventListener("click", () => {
+            this.addToGoogleCalendar(event);
+        });
+
         this.openModal();
     }
 
+    // ---------------------------------------------------------
+    // CLUB DETAILS LOGIC
+    // ---------------------------------------------------------
     showClubDetails(clubId) {
-        console.log('Showing club details for:', clubId);
         const club = this.clubs.find(c => c.id === parseInt(clubId));
-        if (!club) {
-            console.error('Club not found:', clubId);
-            return;
-        }
+        if (!club) return;
 
         const modalBody = document.querySelector('.modal-body');
-        if (!modalBody) {
-            console.error('Modal body not found');
-            return;
-        }
-
         modalBody.innerHTML = `
             <div class="club-details">
                 <div class="detail-header">
@@ -262,73 +256,187 @@ class DataManager {
                 </div>
                 <h2>${this.escapeHTML(club.name)}</h2>
                 <div class="detail-meta">
-                    <div class="meta-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                        </svg>
-                        <span>${club.meetingTime}</span>
-                    </div>
-                    <div class="meta-item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                        </svg>
-                        <span>${club.contact}</span>
-                    </div>
+                    <div class="meta-item">🕒 ${club.meetingTime}</div>
+                    <div class="meta-item">📧 ${club.contact}</div>
                 </div>
                 <div class="detail-content">
                     <h3>About the Club</h3>
                     <p>${this.escapeHTML(club.fullDescription)}</p>
-                    
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <strong>Club President:</strong>
-                            <span>${this.escapeHTML(club.president)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Social Media:</strong>
-                            <span>${this.escapeHTML(club.socialMedia)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <strong>Upcoming Events:</strong>
-                            <span>${this.escapeHTML(club.upcomingEvents)}</span>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-actions">
-                    <button class="btn btn-primary join-club-btn" data-club-id="${club.id}">
+                    <button id="btn-join-club-modal" class="btn btn-primary">
                         Join Club
                     </button>
-                    <button class="btn btn-secondary">Contact Club</button>
                 </div>
             </div>
         `;
 
-        // Add event listener for join button in modal
-        const joinBtn = modalBody.querySelector('.join-club-btn');
+        // 3. JOIN CLUB CLICK (Inside Modal)
+        const joinBtn = document.getElementById('btn-join-club-modal');
         if (joinBtn) {
             joinBtn.addEventListener('click', () => {
-                this.joinClub(club.id);
-                this.closeModal();
+                this.renderJoinClubForm(club);
             });
         }
 
         this.openModal();
     }
 
+    // ---------------------------------------------------------
+    // FORM RENDERING & SUBMISSION (FIREBASE)
+    // ---------------------------------------------------------
+    
+    // Render the Event Registration Form inside the Modal
+    renderRegistrationForm(event) {
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = `
+            <div class="form-container">
+                <h3>Register for ${this.escapeHTML(event.title)}</h3>
+                <form id="event-reg-form" style="margin-top:20px; display:flex; flex-direction:column; gap:15px;">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="reg-name" required style="width:100%; padding:8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="reg-email" required style="width:100%; padding:8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <input type="text" id="reg-sid" required style="width:100%; padding:8px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Registration</button>
+                </form>
+                <button id="back-to-details" class="btn btn-secondary" style="margin-top:10px;">Back</button>
+            </div>
+        `;
+
+        document.getElementById("back-to-details").addEventListener("click", () => {
+            this.showEventDetails(event.id);
+        });
+
+        document.getElementById("event-reg-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("reg-name").value;
+            const email = document.getElementById("reg-email").value;
+            const studentId = document.getElementById("reg-sid").value;
+
+            try {
+                // FIREBASE LOGIC: Add to 'event_registrations' collection
+                await addDoc(collection(db, "event_registrations"), {
+                    eventName: event.title,
+                    eventId: event.id,
+                    studentName: name,
+                    studentEmail: email,
+                    studentId: studentId,
+                    registeredAt: new Date()
+                });
+                
+                alert(`Successfully registered for ${event.title}!`);
+                this.closeModal();
+            } catch (error) {
+                console.error("Error registering:", error);
+                alert("Failed to register. Please try again.");
+            }
+        });
+    }
+
+    // Render the Join Club Form inside the Modal
+    renderJoinClubForm(club) {
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = `
+             <div class="form-container">
+                <h3>Join ${this.escapeHTML(club.name)}</h3>
+                <p>Please fill out your details to request membership.</p>
+                <form id="club-join-form" style="margin-top:20px; display:flex; flex-direction:column; gap:15px;">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="join-name" required style="width:100%; padding:8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="join-email" required style="width:100%; padding:8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Interest / Reason to Join</label>
+                        <textarea id="join-reason" required rows="3" style="width:100%; padding:8px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                </form>
+                <button id="back-to-club" class="btn btn-secondary" style="margin-top:10px;">Back</button>
+            </div>
+        `;
+
+        document.getElementById("back-to-club").addEventListener("click", () => {
+            this.showClubDetails(club.id);
+        });
+
+        document.getElementById("club-join-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("join-name").value;
+            const email = document.getElementById("join-email").value;
+            const reason = document.getElementById("join-reason").value;
+
+            try {
+                // FIREBASE LOGIC: Add to 'club_memberships' collection
+                await addDoc(collection(db, "club_memberships"), {
+                    clubName: club.name,
+                    clubId: club.id,
+                    studentName: name,
+                    studentEmail: email,
+                    reason: reason,
+                    status: "pending",
+                    appliedAt: new Date()
+                });
+
+                // Update local UI
+                club.members++;
+                this.saveData();
+                const memberCountBadge = document.querySelector(`.member-count[data-club-id="${club.id}"]`);
+                if(memberCountBadge) memberCountBadge.textContent = club.members;
+
+                alert(`Request to join ${club.name} submitted!`);
+                this.closeModal();
+            } catch (error) {
+                console.error("Error joining club:", error);
+                alert("Failed to join. Please try again.");
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // ADD TO CALENDAR IMPLEMENTATION
+    // ---------------------------------------------------------
+    addToGoogleCalendar(event) {
+        // Parse dates for Google Calendar format (YYYYMMDDTHHMMSSZ)
+        // Note: This is a basic implementation. For production, handle timezones strictly.
+        const startDate = new Date(event.date + 'T' + event.time);
+        const endDate = new Date(startDate.getTime() + (2 * 60 * 60 * 1000)); // Assume 2 hour duration
+
+        const formatDate = (date) => {
+            return date.toISOString().replace(/-|:|\.\d\d\d/g,"");
+        };
+
+        const start = formatDate(startDate);
+        const end = formatDate(endDate);
+        
+        const googleUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${start}/${end}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+        
+        window.open(googleUrl, '_blank');
+    }
+
+    // ---------------------------------------------------------
+    // UTILITIES & RENDERING HELPERS
+    // ---------------------------------------------------------
     openModal() {
-        console.log('Opening modal');
         const modal = document.querySelector('.details-modal');
         if (modal) {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
-        } else {
-            console.error('Modal not found when trying to open');
         }
     }
 
     closeModal() {
-        console.log('Closing modal');
         const modal = document.querySelector('.details-modal');
         if (modal) {
             modal.classList.remove('active');
@@ -359,7 +467,6 @@ class DataManager {
             this.renderEvents();
             return;
         }
-
         const filtered = this.events.filter(event => 
             event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -373,7 +480,6 @@ class DataManager {
             this.renderEvents();
             return;
         }
-
         const filtered = this.events.filter(event => 
             event.category === category
         );
@@ -381,186 +487,92 @@ class DataManager {
     }
 
     renderEvents(events = this.events) {
-    const container = document.getElementById('events-container');
-    if (!container) {
-        console.error('Events container not found');
-        return;
-    }
+        const container = document.getElementById('events-container');
+        if (!container) return;
 
-    console.log('🔍 DEBUG: Rendering events with images:', events);
+        if (events.length === 0) {
+            container.innerHTML = `<div class="empty-state"><h3>No Events Found</h3></div>`;
+            return;
+        }
 
-    if (events.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <h3>No Events Found</h3>
-                <p>Try adjusting your search or filter criteria</p>
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML = events.map(event => `
-        <article class="event-card ${event.featured ? 'featured' : ''}">
-            <div class="card-image">
-                <img src="${event.image}" alt="${this.escapeHTML(event.title)}" 
-                     onload="console.log('✅ Image loaded:', '${event.title}')"
-                     onerror="console.log('❌ Image failed:', '${event.title}', '${event.image}')">
-                ${event.featured ? '<span class="featured-badge">Featured</span>' : ''}
-                <div class="card-overlay">
-                    <button class="btn-icon" aria-label="Save event">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-                        </svg>
-                    </button>
+        container.innerHTML = events.map(event => `
+            <article class="event-card ${event.featured ? 'featured' : ''}">
+                <div class="card-image">
+                    <img src="${event.image}" alt="${this.escapeHTML(event.title)}">
+                    ${event.featured ? '<span class="featured-badge">Featured</span>' : ''}
                 </div>
-            </div>
-            <div class="card-content">
-                <div class="card-meta">
-                    <span class="category-tag ${event.category}">${this.escapeHTML(event.category)}</span>
-                    <span class="date-time">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                        </svg>
-                        ${event.date} at ${event.time}
-                    </span>
-                </div>
-                <h3 class="card-title">${this.escapeHTML(event.title)}</h3>
-                <p class="card-description">${this.escapeHTML(event.description)}</p>
-                <div class="card-footer">
-                    <div class="location">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                        ${this.escapeHTML(event.location)}
+                <div class="card-content">
+                    <div class="card-meta">
+                        <span class="category-tag ${event.category}">${this.escapeHTML(event.category)}</span>
+                        <span class="date-time">${event.date} at ${event.time}</span>
                     </div>
-                    <button class="btn btn-primary btn-sm view-details-btn" data-event-id="${event.id}">
-                        View Details
-                    </button>
+                    <h3 class="card-title">${this.escapeHTML(event.title)}</h3>
+                    <p class="card-description">${this.escapeHTML(event.description)}</p>
+                    <div class="card-footer">
+                        <div class="location">${this.escapeHTML(event.location)}</div>
+                        <button class="btn btn-primary btn-sm view-details-btn" data-event-id="${event.id}">
+                            View Details
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </article>
-    `).join('');
+            </article>
+        `).join('');
 
-    // Add event listeners to view details buttons
-    container.querySelectorAll('.view-details-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            this.showEventDetails(e.target.dataset.eventId);
+        container.querySelectorAll('.view-details-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                this.showEventDetails(e.target.dataset.eventId);
+            });
         });
-    });
-
-    console.log('✅ Events rendered');
-}
-
-renderClubs() {
-    const container = document.getElementById('clubs-container');
-    if (!container) {
-        console.error('Clubs container not found');
-        return;
     }
 
-    console.log('🔍 DEBUG: Rendering clubs with images:', this.clubs);
+    renderClubs() {
+        const container = document.getElementById('clubs-container');
+        if (!container) return;
 
-    container.innerHTML = this.clubs.map(club => `
-        <article class="club-card">
-            <div class="card-image">
-                <img src="${club.image}" alt="${this.escapeHTML(club.name)}"
-                     onload="console.log('✅ Club image loaded:', '${club.name}')"
-                     onerror="console.log('❌ Club image failed:', '${club.name}', '${club.image}')">
-                <div class="members-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                    </svg>
-                    <span class="member-count" data-club-id="${club.id}">${club.members}</span>
+        container.innerHTML = this.clubs.map(club => `
+            <article class="club-card">
+                <div class="card-image">
+                    <img src="${club.image}" alt="${this.escapeHTML(club.name)}">
+                    <div class="members-badge">
+                        <span class="member-count" data-club-id="${club.id}">${club.members}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="card-content">
-                <div class="card-meta">
+                <div class="card-content">
                     <span class="category-tag ${club.category}">${this.escapeHTML(club.category)}</span>
-                </div>
-                <h3 class="card-title">${this.escapeHTML(club.name)}</h3>
-                <p class="card-description">${this.escapeHTML(club.description)}</p>
-                <div class="club-details">
-                    <div class="detail-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                        </svg>
-                        ${club.meetingTime}
-                    </div>
-                    <div class="detail-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                        </svg>
-                        ${club.contact}
+                    <h3 class="card-title">${this.escapeHTML(club.name)}</h3>
+                    <p class="card-description">${this.escapeHTML(club.description)}</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary join-btn" data-club-id="${club.id}">
+                            Join Club
+                        </button>
+                        <button class="btn btn-secondary btn-sm view-club-details" data-club-id="${club.id}">
+                            Learn More
+                        </button>
                     </div>
                 </div>
-                <div class="card-actions">
-                    <button class="btn btn-primary join-btn" data-club-id="${club.id}">
-                        Join Club
-                    </button>
-                    <button class="btn btn-secondary btn-sm view-club-details" data-club-id="${club.id}">
-                        Learn More
-                    </button>
-                </div>
-            </div>
-        </article>
-    `).join('');
+            </article>
+        `).join('');
 
-    this.attachClubEventListeners();
-    console.log('✅ Clubs rendered');
-}
+        this.attachClubEventListeners();
+    }
 
     attachClubEventListeners() {
+        // Direct "Join" button on card
         document.querySelectorAll('.join-btn').forEach(button => {
             button.addEventListener('click', (e) => {
-                this.joinClub(e.target.dataset.clubId);
+                const club = this.clubs.find(c => c.id === parseInt(e.target.dataset.clubId));
+                this.createModal(); // Ensure modal structure exists
+                this.openModal();
+                this.renderJoinClubForm(club);
             });
         });
 
+        // "Learn More" button
         document.querySelectorAll('.view-club-details').forEach(button => {
             button.addEventListener('click', (e) => {
                 this.showClubDetails(e.target.dataset.clubId);
             });
         });
-    }
-
-    joinClub(clubId) {
-        const club = this.clubs.find(c => c.id === parseInt(clubId));
-        if (club) {
-            club.members++;
-            this.saveData();
-            
-            const memberCount = document.querySelector(`.member-count[data-club-id="${clubId}"]`);
-            if (memberCount) {
-                memberCount.textContent = club.members;
-            }
-            
-            this.showNotification(`You've joined ${club.name}! Welcome to the club.`);
-        }
-    }
-
-    showNotification(message) {
-        const toast = document.createElement('div');
-        toast.className = 'toast-notification';
-        toast.textContent = message;
-        toast.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--color-success);
-            color: white;
-            padding: 12px 20px;
-            border-radius: var(--radius-base);
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-        `;
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.remove();
-        }, 3000);
     }
 
     escapeHTML(str) {
@@ -571,8 +583,7 @@ renderClubs() {
     }
 }
 
-// Initialize when page loads kkkkkkk
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing DataManager...');
     new DataManager();
 });
