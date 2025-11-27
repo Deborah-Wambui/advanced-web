@@ -571,7 +571,7 @@ renderClubs() {
     }
 }
 
-// Initialize when page loads
+// Initialize when page loads kkkkkkk
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing DataManager...');
     new DataManager();
