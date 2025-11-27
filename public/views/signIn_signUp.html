@@ -6,7 +6,7 @@
     <title>Sign In & Sign Up</title>
     <style>
         /* =========================================
-           1. CORE VARIABLES (From your provided CSS)
+           1. CORE VARIABLES
            ========================================= */
         :root {
             /* Colors */
@@ -25,9 +25,15 @@
             --color-surface: #ffffff;
             --color-border: #e9ecef;
             
+            /* Notification Colors (Added for Custom Alerts) */
+            --color-success: #2e7d32; /* Green */
+            --color-error: #c62828;   /* Red */
+            --color-info: #0288d1;    /* Blue */
+
             /* Typography */
             --font-family-base: system-ui, -apple-system, 'Segoe UI', sans-serif;
             --font-weight-bold: 700;
+            --font-weight-medium: 500;
             
             /* Spacing & Radius */
             --space-3: 0.75rem;
@@ -35,12 +41,17 @@
             --space-5: 1.5rem;
             --radius-lg: 1rem;
             --radius-full: 9999px;
+            --radius-base: 0.5rem;
             
             /* Shadows */
             --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             
             /* Transitions */
             --transition-smooth: all 0.6s ease-in-out;
+            
+            /* Z-Index */
+            --z-modal: 1000;
         }
 
         * {
@@ -73,7 +84,7 @@
             overflow: hidden;
             width: 768px;
             max-width: 100%;
-            min-height: 550px; /* Tall enough for forms */
+            min-height: 550px;
         }
 
         /* Form Wrappers */
@@ -96,7 +107,6 @@
             text-align: center;
         }
 
-        /* Typography inside Form */
         h1 {
             font-weight: var(--font-weight-bold);
             margin: 0;
@@ -110,31 +120,6 @@
             margin-bottom: var(--space-3);
         }
 
-        .social-container {
-            margin: var(--space-4) 0;
-        }
-
-        .social-container a {
-            border: 1px solid var(--color-border);
-            border-radius: 50%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 5px;
-            height: 40px;
-            width: 40px;
-            color: var(--color-text);
-            text-decoration: none;
-            transition: 0.3s ease;
-        }
-
-        .social-container a:hover {
-            background-color: var(--color-background);
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-        }
-
-        /* Inputs */
         input {
             background-color: var(--color-background);
             border: 1px solid var(--color-border);
@@ -151,21 +136,6 @@
             background-color: #fff;
         }
 
-        /* Links */
-        .forgot-pass {
-            color: var(--color-text-light);
-            font-size: 14px;
-            text-decoration: none;
-            margin: 15px 0;
-            transition: 0.3s;
-        }
-
-        .forgot-pass:hover {
-            color: var(--color-primary);
-            text-decoration: underline;
-        }
-
-        /* Buttons */
         button {
             border-radius: var(--radius-full);
             border: 1px solid var(--color-primary);
@@ -194,7 +164,6 @@
             border-color: var(--color-primary-dark);
         }
 
-        /* Ghost Button (for the overlay) */
         button.ghost {
             background-color: transparent;
             border-color: var(--color-text-on-primary);
@@ -209,14 +178,12 @@
            3. ANIMATION LOGIC
            ========================================= */
 
-        /* Sign In Container (Default: Visible, Left) */
         .sign-in-container {
             left: 0;
             width: 50%;
             z-index: 2;
         }
 
-        /* Sign Up Container (Default: Hidden behind Sign In) */
         .sign-up-container {
             left: 0;
             width: 50%;
@@ -224,7 +191,6 @@
             z-index: 1;
         }
 
-        /* ANIMATION STATE: Right Panel Active (Sign Up Mode) */
         .auth-container.right-panel-active .sign-in-container {
             transform: translateX(100%);
         }
@@ -248,7 +214,7 @@
         }
 
         /* =========================================
-           4. OVERLAY (The colored sliding panel)
+           4. OVERLAY
            ========================================= */
         .overlay-container {
             position: absolute;
@@ -284,7 +250,6 @@
             transform: translateX(50%);
         }
 
-        /* Overlay Panels (Text inside the slider) */
         .overlay-panel {
             position: absolute;
             display: flex;
@@ -312,7 +277,6 @@
             margin: 20px 0 30px;
         }
 
-        /* Left Panel (Visible when Sign Up is active) */
         .overlay-left {
             transform: translateX(-20%);
         }
@@ -321,7 +285,6 @@
             transform: translateX(0);
         }
 
-        /* Right Panel (Visible when Sign In is active) */
         .overlay-right {
             right: 0;
             transform: translateX(0);
@@ -331,7 +294,6 @@
             transform: translateX(20%);
         }
 
-        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .auth-container {
                 width: 100%;
@@ -343,9 +305,6 @@
                 position: relative;
                 height: auto;
             }
-            /* Note: This specific "Double Slider" design breaks on mobile. 
-               Usually, you hide the overlay on mobile and just stack forms. 
-               For this demo, we keep the desktop logic as requested. */
         }
     </style>
 </head>
@@ -376,7 +335,7 @@
             </form>
         </div>
 
-        <!-- OVERLAY CODE (unchanged) -->
+        <!-- OVERLAY CODE -->
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
@@ -396,29 +355,68 @@
 
 
     <!-- ================================
-         🔥 FIREBASE CONNECTION (A–Z)
+         🔥 FIREBASE CONNECTION & LOGIC
          ================================-->
     <script type="module">
-        /* 1. Import Firebase SDK */
         import { initializeApp } 
             from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
 
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
             from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
 
-        /* 2. Firebase Config — replace with yours */
-      const firebaseConfig = {
-    apiKey: "AIzaSyAXb2qJhuxbQGz6izzl53EKJMFvVO7KixA",
-    authDomain: "campuslife-14f6f.firebaseapp.com",
-    projectId: "campuslife-14f6f",
-    storageBucket: "campuslife-14f6f.firebasestorage.app",
-    messagingSenderId: "226330226174",
-    appId: "1:226330226174:web:5f9a1f4355ba6d31e7e4af"
-  };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAXb2qJhuxbQGz6izzl53EKJMFvVO7KixA",
+            authDomain: "campuslife-14f6f.firebaseapp.com",
+            projectId: "campuslife-14f6f",
+            storageBucket: "campuslife-14f6f.firebasestorage.app",
+            messagingSenderId: "226330226174",
+            appId: "1:226330226174:web:5f9a1f4355ba6d31e7e4af"
+        };
 
-        /* 3. Initialize Firebase */
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+
+        /* ============================
+           CUSTOM NOTIFICATION FUNCTION
+        ============================ */
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                background: ${type === 'success' ? 'var(--color-success)' : type === 'error' ? 'var(--color-error)' : 'var(--color-info)'};
+                color: white;
+                border-radius: var(--radius-base);
+                box-shadow: var(--shadow-lg);
+                z-index: var(--z-modal);
+                font-weight: var(--font-weight-medium);
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Trigger animation in
+            requestAnimationFrame(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            });
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
 
         /* ============================
            SIGN UP FUNCTIONALITY
@@ -432,9 +430,14 @@
 
             try {
                 const user = await createUserWithEmailAndPassword(auth, email, password);
-                alert("Account created successfully!");
+                // REPLACED ALERT WITH NOTIFICATION
+                showNotification("Account created successfully! Please Sign In.", "success");
+                
+                // Switch back to Sign In panel automatically for UX
+                document.getElementById('container').classList.remove("right-panel-active");
             } catch (error) {
-                alert(error.message);
+                // REPLACED ALERT WITH NOTIFICATION
+                showNotification(error.message, "error");
             }
         });
 
@@ -449,12 +452,17 @@
 
             try {
                 const user = await signInWithEmailAndPassword(auth, email, password);
-                alert("Logged in successfully!");
-                // redirect to index.html
-                window.location.href = "../index.html"; // goes one folder up
+                // REPLACED ALERT WITH NOTIFICATION
+                showNotification("Logged in successfully! Redirecting...", "success");
+                
+                // Add a small delay so user sees the message
+                setTimeout(() => {
+                    window.location.href = "../index.html"; 
+                }, 1500);
 
             } catch (error) {
-                alert(error.message);
+                // REPLACED ALERT WITH NOTIFICATION
+                showNotification(error.message, "error");
             }
         });
 
@@ -476,4 +484,4 @@
     </script>
 
 </body>
-</html>  
+</html>

@@ -34,8 +34,6 @@ class DataManager {
     }
 
     loadData() {
-        // We keep the logic to load from local storage if available, 
-        // but rely on the hardcoded initialization if not found.
         const savedData = localStorage.getItem('campusData');
         if (savedData) {
             const data = JSON.parse(savedData);
@@ -47,6 +45,7 @@ class DataManager {
     }
 
     initializeSampleData() {
+        // ... (Your existing sample data remains unchanged) ...
         this.events = [
             {
                 id: 1,
@@ -57,7 +56,7 @@ class DataManager {
                 category: 'social',
                 description: 'Kick off the semester with music and food! Join us for an unforgettable evening with live performances,...',
                 fullDescription: 'Get ready to start the semester with a bang! Our Welcome Back Party features live music from student bands, delicious food from local vendors, games, and plenty of opportunities to connect with fellow students. This is the perfect chance to meet new people and get involved in campus life.',
-                image: '../img/welcome-back-party.jpg', // CORRECTED PATH
+                image: '../img/welcome-back-party.jpg',
                 featured: true,
                 organizer: 'Student Activities Board',
                 capacity: 200,
@@ -73,7 +72,7 @@ class DataManager {
                 category: 'career',
                 description: 'Connect with top employers from various industries. Bring your resume and make valuable professional connections.',
                 fullDescription: 'Meet representatives from over 50 top companies including Google, Microsoft, Amazon, and local startups. This is your chance to explore internship and full-time opportunities across various industries. Professional dress recommended. Resume review services available.',
-                image: '../img/career-fair.jpg', // CORRECTED PATH
+                image: '../img/career-fair.jpg',
                 featured: false,
                 organizer: 'Career Services',
                 capacity: 500,
@@ -89,7 +88,7 @@ class DataManager {
                 category: 'workshop',
                 description: 'Perfect for beginners! Learn Python programming fundamentals through hands-on exercises.',
                 fullDescription: 'This hands-on workshop will introduce you to Python programming from the ground up. We will cover variables, data types, control structures, functions, and basic file operations. By the end, you will have built your first Python application. Laptops will be provided, but feel free to bring your own.',
-                image: "../img/python-workshop.jpg", // CORRECTED PATH
+                image: "../img/python-workshop.jpg",
                 featured: true,
                 organizers: 'Computer Science Department',
                 capacity: 30,
@@ -106,7 +105,7 @@ class DataManager {
                 fullDescription: 'The Computer Science Society is a community of students passionate about technology and programming. We organize weekly coding sessions, host guest speakers from the tech industry, participate in hackathons, and work on collaborative projects. All skill levels are welcome!',
                 members: 45,
                 category: 'academic',
-                image: '../img/computer-science-society.png', // CORRECTED PATH
+                image: '../img/computer-science-society.png',
                 meetingTime: 'Tuesdays 6:00 PM',
                 contact: 'css@university.edu',
                 president: 'Sarah Johnson',
@@ -120,7 +119,7 @@ class DataManager {
                 fullDescription: 'Whether you are using a smartphone or a professional camera, our Photography Club welcomes all levels of photographers. We organize weekly photo walks, monthly workshops on different techniques, and semester-end exhibitions to showcase your work. Equipment is available for checkout.',
                 members: 28,
                 category: 'arts',
-                image: '../img/photography-club.webp', // CORRECTED PATH
+                image: '../img/photography-club.webp',
                 meetingTime: 'Thursdays 5:00 PM',
                 contact: 'photography@university.edu',
                 president: 'Mike Chen',
@@ -134,7 +133,7 @@ class DataManager {
                 fullDescription: 'Our Basketball Team competes in inter-collegiate tournaments while maintaining a supportive environment for players of all skill levels. We have competitive and recreational divisions, with professional coaching available. Regular practice sessions focus on skill development, teamwork, and strategy.',
                 members: 15,
                 category: 'sports',
-                image: "../img/basketball-team.jpg", // CORRECTED PATH
+                image: "../img/basketball-team.jpg",
                 meetingTime: 'Mon & Wed 4:00 PM',
                 contact: 'basketball@university.edu',
                 president: 'James Wilson',
@@ -144,6 +143,7 @@ class DataManager {
         ];
         this.saveData();
     }
+    
     saveData() {
         const data = {
             events: this.events,
@@ -158,6 +158,57 @@ class DataManager {
         this.renderClubs();
         this.setupEventSearch();
         this.setupCategoryFilters();
+    }
+
+    // ---------------------------------------------------------
+    // CUSTOM NOTIFICATION HELPER
+    // ---------------------------------------------------------
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        
+        // Ensure colors exist even if CSS variables aren't set globally
+        const colors = {
+            success: 'var(--color-success, #2e7d32)',
+            error: 'var(--color-error, #c62828)',
+            info: 'var(--color-info, #0288d1)'
+        };
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: ${colors[type] || colors.info};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 2000;
+            font-weight: 500;
+            font-family: system-ui, -apple-system, sans-serif;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        `;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Trigger animation in
+        requestAnimationFrame(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateY(0)';
+        });
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
     }
 
     createModal() {
@@ -330,11 +381,13 @@ class DataManager {
                     registeredAt: new Date()
                 });
                 
-                alert(`Successfully registered for ${event.title}!`);
+                // REPLACED ALERT WITH NOTIFICATION
+                this.showNotification(`Successfully registered for ${event.title}!`, 'success');
                 this.closeModal();
             } catch (error) {
                 console.error("Error registering:", error);
-                alert("Failed to register. Please try again.");
+                // REPLACED ALERT WITH NOTIFICATION
+                this.showNotification("Failed to register. Please try again.", "error");
             }
         });
     }
@@ -393,11 +446,13 @@ class DataManager {
                 const memberCountBadge = document.querySelector(`.member-count[data-club-id="${club.id}"]`);
                 if(memberCountBadge) memberCountBadge.textContent = club.members;
 
-                alert(`Request to join ${club.name} submitted!`);
+                // REPLACED ALERT WITH NOTIFICATION
+                this.showNotification(`Request to join ${club.name} submitted!`, 'success');
                 this.closeModal();
             } catch (error) {
                 console.error("Error joining club:", error);
-                alert("Failed to join. Please try again.");
+                // REPLACED ALERT WITH NOTIFICATION
+                this.showNotification("Failed to join. Please try again.", "error");
             }
         });
     }
@@ -406,8 +461,6 @@ class DataManager {
     // ADD TO CALENDAR IMPLEMENTATION
     // ---------------------------------------------------------
     addToGoogleCalendar(event) {
-        // Parse dates for Google Calendar format (YYYYMMDDTHHMMSSZ)
-        // Note: This is a basic implementation. For production, handle timezones strictly.
         const startDate = new Date(event.date + 'T' + event.time);
         const endDate = new Date(startDate.getTime() + (2 * 60 * 60 * 1000)); // Assume 2 hour duration
 
@@ -555,17 +608,15 @@ class DataManager {
     }
 
     attachClubEventListeners() {
-        // Direct "Join" button on card
         document.querySelectorAll('.join-btn').forEach(button => {
             button.addEventListener('click', (e) => {
                 const club = this.clubs.find(c => c.id === parseInt(e.target.dataset.clubId));
-                this.createModal(); // Ensure modal structure exists
+                this.createModal();
                 this.openModal();
                 this.renderJoinClubForm(club);
             });
         });
 
-        // "Learn More" button
         document.querySelectorAll('.view-club-details').forEach(button => {
             button.addEventListener('click', (e) => {
                 this.showClubDetails(e.target.dataset.clubId);
