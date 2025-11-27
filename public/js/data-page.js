@@ -583,7 +583,11 @@ class DataManager {
     }
 }
 
+<<<<<<< HEAD
 // Initialize when page loads
+=======
+// Initialize when page loads 
+>>>>>>> 6eca73e8a537efb2079d1d1001a885e0dffae619
 document.addEventListener('DOMContentLoaded', () => {
     new DataManager();
 });
