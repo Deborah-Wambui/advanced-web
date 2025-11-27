@@ -450,6 +450,9 @@
             try {
                 const user = await signInWithEmailAndPassword(auth, email, password);
                 alert("Logged in successfully!");
+                // redirect to index.html
+                window.location.href = "../index.html"; // goes one folder up
+
             } catch (error) {
                 alert(error.message);
             }
