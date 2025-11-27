@@ -47,7 +47,6 @@ class DataManager {
     }
 
     initializeSampleData() {
-        // HARDCODED VALUES AS REQUESTED - DO NOT TOUCH
         this.events = [
             {
                 id: 1,
@@ -56,9 +55,9 @@ class DataManager {
                 time: '18:00',
                 location: 'Student Union',
                 category: 'social',
-                description: 'Kick off the semester with music and food! Join us for an unforgettable evening with live performances, great food, and opportunities to meet new friends.',
+                description: 'Kick off the semester with music and food! Join us for an unforgettable evening with live performances,...',
                 fullDescription: 'Get ready to start the semester with a bang! Our Welcome Back Party features live music from student bands, delicious food from local vendors, games, and plenty of opportunities to connect with fellow students. This is the perfect chance to meet new people and get involved in campus life.',
-                image: 'https://picsum.photos/400/250?random=1',
+                image: '../img/welcome-back-party.jpg', // CORRECTED PATH
                 featured: true,
                 organizer: 'Student Activities Board',
                 capacity: 200,
@@ -74,7 +73,7 @@ class DataManager {
                 category: 'career',
                 description: 'Connect with top employers from various industries. Bring your resume and make valuable professional connections.',
                 fullDescription: 'Meet representatives from over 50 top companies including Google, Microsoft, Amazon, and local startups. This is your chance to explore internship and full-time opportunities across various industries. Professional dress recommended. Resume review services available.',
-                image: 'https://picsum.photos/400/250?random=2',
+                image: '../img/career-fair.jpg', // CORRECTED PATH
                 featured: false,
                 organizer: 'Career Services',
                 capacity: 500,
@@ -90,9 +89,9 @@ class DataManager {
                 category: 'workshop',
                 description: 'Perfect for beginners! Learn Python programming fundamentals through hands-on exercises.',
                 fullDescription: 'This hands-on workshop will introduce you to Python programming from the ground up. We will cover variables, data types, control structures, functions, and basic file operations. By the end, you will have built your first Python application. Laptops will be provided, but feel free to bring your own.',
-                image: "https://picsum.photos/400/250?random=3",
+                image: "../img/python-workshop.jpg", // CORRECTED PATH
                 featured: true,
-                organizer: 'Computer Science Department',
+                organizers: 'Computer Science Department',
                 capacity: 30,
                 requirements: 'No prior experience needed',
                 contact: 'cs-workshops@university.edu'
@@ -107,7 +106,7 @@ class DataManager {
                 fullDescription: 'The Computer Science Society is a community of students passionate about technology and programming. We organize weekly coding sessions, host guest speakers from the tech industry, participate in hackathons, and work on collaborative projects. All skill levels are welcome!',
                 members: 45,
                 category: 'academic',
-                image: 'https://picsum.photos/400/250?random=4',
+                image: '../img/computer-science-society.png', // CORRECTED PATH
                 meetingTime: 'Tuesdays 6:00 PM',
                 contact: 'css@university.edu',
                 president: 'Sarah Johnson',
@@ -121,7 +120,7 @@ class DataManager {
                 fullDescription: 'Whether you are using a smartphone or a professional camera, our Photography Club welcomes all levels of photographers. We organize weekly photo walks, monthly workshops on different techniques, and semester-end exhibitions to showcase your work. Equipment is available for checkout.',
                 members: 28,
                 category: 'arts',
-                image: 'https://picsum.photos/400/250?random=5',
+                image: '../img/photography-club.webp', // CORRECTED PATH
                 meetingTime: 'Thursdays 5:00 PM',
                 contact: 'photography@university.edu',
                 president: 'Mike Chen',
@@ -135,7 +134,7 @@ class DataManager {
                 fullDescription: 'Our Basketball Team competes in inter-collegiate tournaments while maintaining a supportive environment for players of all skill levels. We have competitive and recreational divisions, with professional coaching available. Regular practice sessions focus on skill development, teamwork, and strategy.',
                 members: 15,
                 category: 'sports',
-                image: "https://picsum.photos/400/250?random=6",
+                image: "../img/basketball-team.jpg", // CORRECTED PATH
                 meetingTime: 'Mon & Wed 4:00 PM',
                 contact: 'basketball@university.edu',
                 president: 'James Wilson',
@@ -145,7 +144,6 @@ class DataManager {
         ];
         this.saveData();
     }
-
     saveData() {
         const data = {
             events: this.events,
