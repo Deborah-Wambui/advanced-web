@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - Campus Life</title>
+    <meta name="description" content="View your registered events and joined clubs">
+    <link rel="stylesheet" href="../css/tokens.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <style>
+        /* Dashboard specific styles */
+        .dashboard-container {
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+        
+        .dashboard-header p {
+            color: var(--color-text-light);
+            font-size: 1.1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-base);
+            border: 1px solid var(--color-border);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .dashboard-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .dashboard-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-base);
+            border: 1px solid var(--color-border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .card-content {
+            padding: 0.5rem 1.5rem 1.5rem;
+        }
+        
+        .card-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            color: var(--color-text-light);
+        }
+        
+        .card-detail svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 0.75rem;
+            fill: currentColor;
+        }
+        
+        .card-actions {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--color-border);
+        }
+        
+        .empty-state h3 {
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: var(--color-text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading-spinner {
+            border: 3px solid var(--color-border);
+            border-top: 3px solid var(--color-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation">
+            <div class="nav-container">
+                <h1><a href="../index.html" class="logo">Campus Life</a></h1>
+                <ul class="nav-menu">
+                    <li><a href="../index.html" class="nav-link">Home</a></li>
+                    <li><a href="data.html" class="nav-link">Events & Clubs</a></li>
+                    <li><a href="form.html" class="nav-link">Book & Support</a></li>
+                    <li><a href="dashboard.html" class="nav-link active">My Dashboard</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main">
+        <div class="container dashboard-container">
+            <!-- Loading State -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading your dashboard...</p>
+            </div>
+
+            <!-- Dashboard Content (hidden by default) -->
+            <div id="dashboard-content" style="display: none;">
+                <div class="dashboard-header">
+                    <h1>My Dashboard</h1>
+                    <p id="welcome-message">Welcome back!</p>
+                </div>
+
+                <!-- Statistics -->
+                <div class="stats-grid" id="stats-container">
+                    <!-- Stats will be loaded here -->
+                </div>
+
+                <!-- Registered Events -->
+                <section class="dashboard-section">
+                    <h2 class="section-title">My Registered Events</h2>
+                    <div class="dashboard-grid" id="events-container">
+                        <!-- Events will be loaded here -->
+                    </div>
+                    <div id="empty-events" class="empty-state" style="display: none;">
+                        <h3>No Event Registrations</h3>
+                        <p>You haven't registered for any events yet.</p>
+                        <a href="data.html" class="btn btn-primary">Browse Events</a>
+                    </div>
+                </section>
+
+                <!-- Joined Clubs -->
+                <section class="dashboard-section">
+                    <h2 class="section-title">My Clubs</h2>
+                    <div class="dashboard-grid" id="clubs-container">
+                        <!-- Clubs will be loaded here -->
+                    </div>
+                    <div id="empty-clubs" class="empty-state" style="display: none;">
+                        <h3>No Club Memberships</h3>
+                        <p>You haven't joined any clubs yet.</p>
+                        <a href="data.html" class="btn btn-primary">Browse Clubs</a>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Email Input for Demo -->
+            <div id="email-prompt" style="display: none; max-width: 400px; margin: 0 auto;">
+                <div class="empty-state">
+                    <h3>View Your Registrations</h3>
+                    <p>Enter the email you used to register for events/clubs:</p>
+                    <div style="margin: 1.5rem 0;">
+                        <input type="email" id="user-email" placeholder="your-email@example.com" 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-base);">
+                    </div>
+                    <button id="load-dashboard" class="btn btn-primary">Load My Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer role="contentinfo" class="compact-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@studenthub.edu</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Hours: Mon-Fri 8am-6pm</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Student Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase -->
+    <script type="module" src="../js/dashboard.js"></script>
+</body>
+</html>

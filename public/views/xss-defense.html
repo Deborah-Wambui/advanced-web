@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XSS Defense Demo</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            line-height: 1.6;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+        }
+        h1 { color: #333; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            font-size: 16px; 
+            border: 1px solid #ddd;
+        }
+        button { 
+            padding: 10px 20px; 
+            background: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer;
+        }
+        button:hover { background: #45a049; }
+        .output { 
+            margin-top: 30px; 
+            padding: 15px; 
+            background: #f5f5f5; 
+            border-radius: 5px;
+        }
+        .safe { 
+            border-left: 5px solid green; 
+            padding-left: 15px;
+        }
+        .danger { 
+            border-left: 5px solid red; 
+            padding-left: 15px;
+        }
+        code { 
+            background: #e9e9e9; 
+            padding: 2px 5px; 
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>XSS Defense Demonstration</h1>
+        <p>Type the XSS payload: <code>&lt;script&gt;alert('hacked')&lt;/script&gt;</code></p>
+        
+        <div class="form-group">
+            <label for="userInput">Test Input:</label>
+            <input type="text" id="userInput" 
+                   placeholder="Enter text here..." 
+                   value="<script>alert('hacked')</script>">
+        </div>
+        
+        <button onclick="displaySafe()">Show Safe Output</button>
+        <button onclick="displayUnsafe()" style="background: #f44336;">Show Unsafe (DANGER)</button>
+        
+        <div class="output" id="outputArea">
+            <h3>Output will appear here</h3>
+            <p>Click a button above to see the result</p>
+        </div>
+        
+        <div class="explanation safe">
+            <h3>✅ Safe Method:</h3>
+            <p>The text is converted to HTML entities:</p>
+            <p><code>&lt;</code> becomes <code>&amp;lt;</code></p>
+            <p><code>&gt;</code> becomes <code>&amp;gt;</code></p>
+            <p>So <code>&lt;script&gt;</code> displays as text, not as HTML tags.</p>
+        </div>
+    </div>
+
+    <script>
+        // SAFE function - Escapes HTML special characters
+function escapeHTML(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// UNSAFE function - Directly inserts text (VULNERABLE)
+function displayUnsafe() {
+    const input = document.getElementById('userInput').value;
+    const outputArea = document.getElementById('outputArea');
+    
+    outputArea.innerHTML = `
+        <h3 class="danger">❌ UNSAFE OUTPUT (XSS VULNERABLE):</h3>
+        <p>You entered: ${input}</p>
+        <div class="danger">
+            <p><strong>WARNING:</strong> This would execute malicious code!</p>
+            <p>If you see an alert popup, your site is vulnerable.</p>
+        </div>
+    `;
+    
+    // Note: In a real vulnerable site, the script would execute here
+    // We're showing the concept but not actually running dangerous code
+}
+
+// SAFE function - Shows escaped output
+function displaySafe() {
+    const input = document.getElementById('userInput').value;
+    const escapedInput = escapeHTML(input);
+    const outputArea = document.getElementById('outputArea');
+    
+    outputArea.innerHTML = `
+        <h3 class="safe">✅ SAFE OUTPUT (XSS PROTECTED):</h3>
+        <p><strong>Raw input:</strong> <code>${escapedInput}</code></p>
+        <p><strong>Displayed as:</strong> ${escapedInput}</p>
+        <div class="safe">
+            <p><strong>✅ SAFE:</strong> The script tags are displayed as plain text, not executed.</p>
+            <p>No alert popup will appear because the HTML is properly escaped.</p>
+        </div>
+    `;
+}
+
+// Initialize with safe display
+window.onload = function() {
+    displaySafe();
+};
+    </script>
+</body>
+</html>
