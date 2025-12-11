@@ -115,14 +115,33 @@
         </div>
     </footer>
 
-    <script src="js/a11y.js"></script>
-    <script>
-  // If we have a stored redirect path, use it
-  if (sessionStorage.redirect) {
-    const redirectPath = sessionStorage.redirect;
-    delete sessionStorage.redirect;
-    window.history.replaceState(null, null, redirectPath);
-  }
+   <!-- GitHub Pages SPA Redirect Handler -->
+<script>
+  (function() {
+    // Check if we have a stored redirect
+    const redirectPath = localStorage.getItem('gh_redirect');
+    
+    if (redirectPath && redirectPath !== '/' && redirectPath !== '/index.html') {
+      // Clear the stored value
+      localStorage.removeItem('gh_redirect');
+      
+      // Use your router if available, otherwise update URL
+      if (typeof window.history !== 'undefined') {
+        // Update URL without reloading
+        window.history.replaceState(null, null, redirectPath);
+        
+        // If using a SPA framework, trigger navigation
+        if (typeof window.reactRouter !== 'undefined') {
+          // For React Router
+          window.reactRouter.navigate(redirectPath);
+        } else if (typeof window.vueRouter !== 'undefined') {
+          // For Vue Router
+          window.vueRouter.push(redirectPath);
+        }
+        // Add other frameworks as needed
+      }
+    }
+  })();
 </script>
 </body>
 </html>
