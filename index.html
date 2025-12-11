@@ -43,5 +43,13 @@
         If you're not redirected automatically, 
         <a href="public/index.html" style="color: white; text-decoration: underline;">click here</a>
     </p>
+    <script>
+  // If we have a stored redirect path, use it
+  if (sessionStorage.redirect) {
+    const redirectPath = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    window.history.replaceState(null, null, redirectPath);
+  }
+</script>
 </body>
 </html>
