@@ -1,59 +1,59 @@
-# Campus Life Portal - University Services Platform
+ Campus Life Portal - University Services Platform
 
 A comprehensive university portal for students to manage campus life including events, clubs, room bookings, and support services.
 
-## 🌟 Live Demo
+ Live Demo
 [View Live Website](https://deborah-wambui.github.io/advanced-web/)
 
-## 🚀 Features
+ Features
 
-### 🏠 Homepage
+ Homepage
 - Modern hero section with call-to-action buttons
 - Feature cards highlighting all platform services
 - Quick access dashboard button
 - Responsive design optimized for all devices
 
-### 📅 Events & Clubs
+ Events & Clubs
 - Browse upcoming campus events with detailed information
 - View student clubs and organizations
 - Interactive event registration system
 - Real-time attendance tracking
 - Category filtering and search functionality
 
-### 📊 My Dashboard
+ My Dashboard
 - **Personalized dashboard** for registered users
 - View all event registrations in one place
 - Track club memberships and application status
 - Statistics and activity overview
 - Manage bookings and registrations
 
-### 🏢 Room Booking System
+ Room Booking System
 - Reserve study rooms and facilities
 - Date and time selection
 - Purpose description field
 - Real-time booking management
 
-### 🛠️ Help Desk Support
+ Help Desk Support
 - Submit support tickets with priority levels
 - Track issue resolution status
 - Multi-category support requests
 - Email confirmation system
 
-### 👤 User Authentication
+ User Authentication
 - Email-based dashboard access
 - Registration tracking
 - Personal activity history
 
-## 🛠️ Technology Stack
+ Technology Stack
 
-### Frontend
+Frontend
 - **HTML5** with semantic structure and ARIA landmarks
 - **CSS3** with Grid/Flexbox responsive layouts
 - **CSS Custom Properties** for theming and variables
 - **Vanilla JavaScript** for interactive features
 - **Firebase Firestore** for data persistence
 
-### Backend & Services
+Backend & Services
 - **Firebase Authentication** (email-based access)
 - **Firebase Firestore** database for:
   - Event registrations
@@ -61,12 +61,12 @@ A comprehensive university portal for students to manage campus life including e
   - Room bookings
   - Support tickets
 
-### DevOps & Deployment
+DevOps & Deployment
 - **GitHub Pages** for hosting
 - **Docker** containerization
 - **Git** version control
 
-## ♿ Accessibility Features
+ Accessibility Features
 - WCAG 2.1 AA compliance
 - Semantic HTML landmarks (header, nav, main, footer)
 - Keyboard navigation support
@@ -78,11 +78,11 @@ A comprehensive university portal for students to manage campus life including e
 - Focus management and visible focus indicators
 - Reduced motion preferences support
 
-## 📁 Project Structure
+ Project Structure
 
-## 🚀 Quick Start
+ Quick Start
 
-### Local Development
+Local Development
 ```bash
 # Clone the repository
 git clone https://github.com/Deborah-Wambui/advanced-web.git
