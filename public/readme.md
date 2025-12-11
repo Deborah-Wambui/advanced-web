@@ -1,53 +1,101 @@
-Project Overview
-A university portal for students to access campus services including events, clubs, room bookings, and help desk support.
+# Campus Life Portal - University Services Platform
 
-Features Implemented
-Homepage with service overview
+A comprehensive university portal for students to manage campus life including events, clubs, room bookings, and support services.
 
-Events & Clubs browsing page
+## 🌟 Live Demo
+[View Live Website](https://deborah-wambui.github.io/advanced-web/)
 
-Room Booking & Help Desk forms page
+## 🚀 Features
 
-Responsive design for all devices
+### 🏠 Homepage
+- Modern hero section with call-to-action buttons
+- Feature cards highlighting all platform services
+- Quick access dashboard button
+- Responsive design optimized for all devices
 
-Keyboard navigation and screen reader support
+### 📅 Events & Clubs
+- Browse upcoming campus events with detailed information
+- View student clubs and organizations
+- Interactive event registration system
+- Real-time attendance tracking
+- Category filtering and search functionality
 
-Technology Used
-HTML5 with semantic structure
+### 📊 My Dashboard
+- **Personalized dashboard** for registered users
+- View all event registrations in one place
+- Track club memberships and application status
+- Statistics and activity overview
+- Manage bookings and registrations
 
-CSS3 with Grid/Flexbox layouts
+### 🏢 Room Booking System
+- Reserve study rooms and facilities
+- Date and time selection
+- Purpose description field
+- Real-time booking management
 
-Vanilla JavaScript for basic accessibility
+### 🛠️ Help Desk Support
+- Submit support tickets with priority levels
+- Track issue resolution status
+- Multi-category support requests
+- Email confirmation system
 
-WCAG 2.1 AA compliance
+### 👤 User Authentication
+- Email-based dashboard access
+- Registration tracking
+- Personal activity history
 
-Key Concepts
-Semantic HTML landmarks (header, nav, main, footer)
+## 🛠️ Technology Stack
 
-Accessible skip links and focus indicators
+### Frontend
+- **HTML5** with semantic structure and ARIA landmarks
+- **CSS3** with Grid/Flexbox responsive layouts
+- **CSS Custom Properties** for theming and variables
+- **Vanilla JavaScript** for interactive features
+- **Firebase Firestore** for data persistence
 
-Mobile-first responsive design
+### Backend & Services
+- **Firebase Authentication** (email-based access)
+- **Firebase Firestore** database for:
+  - Event registrations
+  - Club memberships
+  - Room bookings
+  - Support tickets
 
-CSS custom properties for theming
+### DevOps & Deployment
+- **GitHub Pages** for hosting
+- **Docker** containerization
+- **Git** version control
 
-Minimal JavaScript for accessibility enhancements
+## ♿ Accessibility Features
+- WCAG 2.1 AA compliance
+- Semantic HTML landmarks (header, nav, main, footer)
+- Keyboard navigation support
+- Screen reader compatibility
+- Skip to main content links
+- Proper heading hierarchy (h1-h6)
+- ARIA labels and roles
+- Sufficient color contrast (4.5:1 minimum)
+- Focus management and visible focus indicators
+- Reduced motion preferences support
 
-How to Run
-Serve the public folder using any static server
+## 📁 Project Structure
 
-Open index.html in a web browser
+## 🚀 Quick Start
 
-Navigate between pages using keyboard or mouse
+### Local Development
+```bash
+# Clone the repository
+git clone https://github.com/Deborah-Wambui/advanced-web.git
+cd advanced-web
 
-Accessibility Features
-Skip to main content links
+# Open the homepage
+open docs/views/index.html
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    // ... other config
+};
 
-Proper heading hierarchy
-
-ARIA labels and landmarks
-
-Sufficient color contrast
-
-Focus management
-
-Update
+# or
+start docs/views/index.html  # Windows
