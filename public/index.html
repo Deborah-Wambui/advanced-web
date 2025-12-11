@@ -1,3 +1,4 @@
+<!-- PUBLIC VERSION -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +75,7 @@
             </div>
         </section>
 
-        <!-- Compact Info Section -->
+        <!-- Compact Info Sections -->
         <section class="compact-info">
             <div class="container">
                 <div class="info-content">
@@ -114,6 +115,33 @@
         </div>
     </footer>
 
-    <script src="js/a11y.js"></script>
+   <!-- GitHub Pages SPA Redirect Handler -->
+<script>
+  (function() {
+    // Check if we have a stored redirect
+    const redirectPath = localStorage.getItem('gh_redirect');
+    
+    if (redirectPath && redirectPath !== '/' && redirectPath !== '/index.html') {
+      // Clear the stored value
+      localStorage.removeItem('gh_redirect');
+      
+      // Use your router if available, otherwise update URL
+      if (typeof window.history !== 'undefined') {
+        // Update URL without reloading
+        window.history.replaceState(null, null, redirectPath);
+        
+        // If using a SPA framework, trigger navigation
+        if (typeof window.reactRouter !== 'undefined') {
+          // For React Router
+          window.reactRouter.navigate(redirectPath);
+        } else if (typeof window.vueRouter !== 'undefined') {
+          // For Vue Router
+          window.vueRouter.push(redirectPath);
+        }
+        // Add other frameworks as needed
+      }
+    }
+  })();
+</script>
 </body>
 </html>
