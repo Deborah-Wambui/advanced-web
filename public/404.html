@@ -4,10 +4,11 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    // Store the original path
-    sessionStorage.redirect = location.pathname;
-    // Redirect to home page
-    location.replace('/');
+    // Store where we wanted to go
+    const redirectTo = window.location.pathname + window.location.search + window.location.hash;
+    localStorage.setItem('gh_redirect', redirectTo);
+    // Go to homepage
+    window.location.href = '/';
   </script>
 </head>
 <body>
